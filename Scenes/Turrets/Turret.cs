@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public abstract class TowerTracking : Node2D
+public abstract class Turret : Node2D
 {
 	public void Turn() 
 	{
