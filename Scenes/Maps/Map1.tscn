@@ -1,13 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Enviroment/Tilesheets/terrainTiles_default.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Enviroment/Props/crateWood.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Enviroment/Props/crateMetal.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Enviroment/Props/treeGreen_large.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Enviroment/Props/treeBrown_large.png" type="Texture" id=5]
-[ext_resource path="res://Scenes/Turrets/GunT1.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/Turrets/MissileT1.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scenes/Turrets/GunT2.tscn" type="PackedScene" id=8]
 
 [sub_resource type="TileSet" id=1]
 0/name = "terrainTiles_default.png 0"
@@ -128,12 +125,3 @@ format = 1
 tile_data = PoolIntArray( 6, 3, 0, 10, 4, 0, 15, 3, 0, 65539, 0, 65538, 65540, 0, 1, 65541, 0, 1, 65542, 0, 1, 65543, 0, 1, 65544, 0, 1, 65545, 0, 1, 65546, 0, 1, 65547, 0, 1, 65548, 0, 1, 65549, 0, 65539, 65553, 1, 0, 131073, 1, 0, 131075, 0, 0, 131085, 0, 0, 131087, 2, 0, 196610, 3, 0, 196611, 0, 0, 196614, 1, 0, 196615, 3, 0, 196621, 0, 0, 196626, 3, 0, 262147, 0, 0, 262152, 1, 0, 262154, 0, 65538, 262155, 0, 1, 262156, 0, 1, 262157, 0, 4, 262158, 0, 1, 262159, 0, 1, 262160, 0, 65539, 327683, 0, 65540, 327684, 0, 1, 327685, 0, 1, 327686, 0, 65539, 327690, 0, 0, 327695, 2, 0, 327696, 0, 0, 327698, 4, 0, 393217, 3, 0, 393222, 0, 0, 393226, 0, 0, 393232, 0, 0, 393234, 2, 0, 393235, 4, 0, 458758, 0, 0, 458760, 2, 0, 458762, 0, 0, 458768, 0, 0, 589821, 0, 0, 589822, 0, 1, 589823, 0, 1, 524288, 0, 1, 524289, 0, 1, 524290, 0, 1, 524291, 0, 65539, 524294, 0, 0, 524296, 3, 0, 524298, 0, 65540, 524299, 0, 1, 524300, 0, 1, 524301, 0, 5, 524302, 0, 1, 524303, 0, 1, 524304, 0, 65541, 524307, 1, 0, 589827, 0, 65540, 589828, 0, 1, 589829, 0, 1, 589830, 0, 65541, 589837, 0, 0, 589842, 3, 0, 655362, 4, 0, 655368, 4, 0, 655369, 1, 0, 655373, 0, 65540, 655374, 0, 1, 655375, 0, 1, 655376, 0, 65539, 720899, 2, 0, 720909, 2, 0, 720912, 0, 0, 786448, 0, 0, 851984, 0, 0, 917520, 0, 0 )
 
 [node name="Turrets" type="Node2D" parent="."]
-
-[node name="GunT1" parent="Turrets" instance=ExtResource( 6 )]
-position = Vector2( 286, 286 )
-
-[node name="GunT2" parent="Turrets" instance=ExtResource( 8 )]
-position = Vector2( 307, 458 )
-
-[node name="MissileT1" parent="Turrets" instance=ExtResource( 7 )]
-position = Vector2( 544, 389 )

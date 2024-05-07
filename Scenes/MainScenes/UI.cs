@@ -18,8 +18,7 @@ public class UI : CanvasLayer
 		
 		GetNode<Node2D>("TowerPreview/DragTower").Modulate = new Color("ad54ff3c");
 	}
-
-// acabar esta mal
+	
 	public void updateTowerPreview(Vector2 newPosition, Color color)
 	{
 		GetNode<Control>("TowerPreview").RectPosition = newPosition;

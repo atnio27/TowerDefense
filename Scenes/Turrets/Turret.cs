@@ -8,10 +8,5 @@ public abstract class Turret : Node2D
 		Vector2 enemyPosition = GetGlobalMousePosition();
 		GetNode<Sprite>("Turret").LookAt(enemyPosition);
 	}
-	
-	public void ColorRed()
-	{
-		
-	}
 }
 
