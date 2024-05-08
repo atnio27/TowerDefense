@@ -7,7 +7,9 @@ public class GameScene : Node2D
 	bool buildMode = false;
 	bool buildValid = false;
 	Vector2 buildLocation;
+	Vector2 buildTile;
 	string buildType;
+	
 	
 	public override void _Ready()
 	{
@@ -15,7 +17,7 @@ public class GameScene : Node2D
 
 		foreach (Node node in GetTree().GetNodesInGroup("buildButtons"))
 		{
-			node.Connect("pressed", this, "InitiateBuildMode", new Godot.Collections.Array { node.Name }); //
+			node.Connect("pressed", this, "InitiateBuildMode", new Godot.Collections.Array { node.Name });
 		}
 	}
 	
@@ -39,14 +41,16 @@ public class GameScene : Node2D
 		}
 	}
 
-	public void InitiateBuildMode(string towerType)
+	public void initiateBuildMode(string towerType)
 	{
-		buildType = towerType + "T1";
-		buildMode = true;
-		GetNode<UI>("UI").SetTowerPreview(buildType, GetGlobalMousePosition());
+		if (buildMode==false)
+		{
+			buildType = towerType + "T1";
+			buildMode = true;
+			GetNode<UI>("UI").SetTowerPreview(buildType, GetGlobalMousePosition());
+		}
 	}
-
-// acabar esta mal
+	
 	public void updateTowerPreview()
 	{
 		Vector2 mousePosition = GetGlobalMousePosition();
@@ -58,6 +62,7 @@ public class GameScene : Node2D
 			GetNode<UI>("UI").updateTowerPreview(tilePosition, new Color("ad54ff3c"));
 			buildValid = true;
 			buildLocation = tilePosition;
+			buildTile = currentTile;
 		}
 		else
 		{
@@ -69,7 +74,7 @@ public class GameScene : Node2D
 	public void cancelBuildMode()
 	{
 		buildMode = false;
-		buildValid = false;;
+		buildValid = false;
 		GetNode<Control>("UI/TowerPreview").QueueFree();
 	}
 
@@ -81,7 +86,8 @@ public class GameScene : Node2D
 			PackedScene newTower = (PackedScene)ResourceLoader.Load("res://Scenes/Turrets/" + buildType + ".tscn");
 			Node2D newTowerInstance = (Node2D)newTower.Instance();
 			newTowerInstance.Position = buildLocation;
-			mapNode.GetNode<Node>("Turrets").AddChild(newTowerInstance, true);
+			mapNode.GetNode<TileMap>("TowerExclusion").SetCellv(buildTile, 5);
+			mapNode.GetNode<Node2D>("Turrets").AddChild(newTowerInstance, true);
 			cancelBuildMode();
 		}
 	}
