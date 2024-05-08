@@ -17,7 +17,7 @@ public class GameScene : Node2D
 
 		foreach (Node node in GetTree().GetNodesInGroup("buildButtons"))
 		{
-			node.Connect("pressed", this, "InitiateBuildMode", new Godot.Collections.Array { node.Name });
+			node.Connect("pressed", this, "initiateBuildMode", new Godot.Collections.Array { node.Name });
 		}
 	}
 	
