@@ -1,5 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+
 
 public class GameScene : Node2D
 {
@@ -9,6 +13,9 @@ public class GameScene : Node2D
 	Vector2 buildLocation;
 	Vector2 buildTile;
 	string buildType;
+
+	int currentWave = 0;
+	int enemiesInWave = 0;
 	
 	
 	public override void _Ready()
@@ -19,6 +26,7 @@ public class GameScene : Node2D
 		{
 			node.Connect("pressed", this, "initiateBuildMode", new Godot.Collections.Array { node.Name });
 		}
+		startNextWave();
 	}
 	
 	public override void _Process(float delta)
@@ -41,6 +49,41 @@ public class GameScene : Node2D
 		}
 	}
 
+	// Wave Functions
+	public async void startNextWave()
+	{
+		SortedList<float, string> waveData = retrieveWaveData();
+		await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+		spawnEnemies(waveData);
+	}
+
+	
+
+	public SortedList<float, string> retrieveWaveData()
+	{
+		SortedList<float, string> waveData = new SortedList<float, string>()
+		{
+			{2f, "BlueTank"},
+			{1f, "BlueTank"}
+		};
+		currentWave ++;
+		enemiesInWave = waveData.Count;
+		return waveData;
+	}
+
+	public async void spawnEnemies(SortedList<float, string> waveData)
+	{
+		waveData = retrieveWaveData();
+		foreach (KeyValuePair<float, string> kvp in waveData)
+		{
+			PackedScene newEnemy = (PackedScene)ResourceLoader.Load("res://Scenes/Enemies/" + kvp.Value + ".tscn");
+			Node newEnemyinstance = newEnemy.Instance();
+			mapNode.GetNode<Path2D>("Path").AddChild(newEnemyinstance,true);
+			await ToSignal(GetTree().CreateTimer(kvp.Key), "timeout");
+		}
+	}
+
+	// Building Functions
 	public void initiateBuildMode(string towerType)
 	{
 		if (buildMode==false)

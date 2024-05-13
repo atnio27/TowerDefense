@@ -1,10 +1,10 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Numerics;
 
 public class UI : CanvasLayer
 {
-	float towerRange = 1000;
 	public void SetTowerPreview(string towerType, Godot.Vector2 mousePosition)
 	{
 		PackedScene dragTower = (PackedScene)ResourceLoader.Load("res://Scenes/Turrets/" + towerType + ".tscn");
@@ -15,7 +15,7 @@ public class UI : CanvasLayer
 		{
 			Position = new Godot.Vector2(32, 32)
 		};
-		float scaling = towerRange / 600.0f;
+		float scaling = GameData.towerData[towerType]["range"] / 600.0f;
 		rangeTexture.Scale = new Godot.Vector2(scaling, scaling);
 		Texture texture = (Texture)ResourceLoader.Load("res://Assets/UI/range_overlay.png");
 		rangeTexture.Texture = texture;

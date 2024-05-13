@@ -14,6 +14,10 @@ config/name="TowerDefense"
 run/main_scene="res://SceneHandler.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GameData="*res://Singletones/GameData.cs"
+
 [display]
 
 window/size/width=1280
