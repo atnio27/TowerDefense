@@ -3,13 +3,8 @@ using System;
 
 public class BlueTank : PathFollow2D
 {
-	float speed = 300;
-	public override void _Ready()
-	{
-		
-	}
-
- // Called every frame. 'delta' is the elapsed time since the previous frame.
+	float speed = 150;
+	
 	public override void _PhysicsProcess(float delta)
 	{
 		move(delta);

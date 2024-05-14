@@ -16,8 +16,11 @@ public class GameScene : Node2D
 
 	int currentWave = 0;
 	int enemiesInWave = 0;
-	
-	
+
+	public bool BuildMode { get => buildMode; set => buildMode = value; }
+	public int CurrentWave { get => currentWave; set => currentWave = value; }
+
+
 	public override void _Ready()
 	{
 		mapNode = GetNode<Node2D>("Map1");
@@ -26,7 +29,6 @@ public class GameScene : Node2D
 		{
 			node.Connect("pressed", this, "initiateBuildMode", new Godot.Collections.Array { node.Name });
 		}
-		startNextWave();
 	}
 	
 	public override void _Process(float delta)
@@ -49,19 +51,18 @@ public class GameScene : Node2D
 		}
 	}
 
-	// Wave Functions
 	public async void startNextWave()
 	{
-		SortedList<float, string> waveData = retrieveWaveData();
+		Dictionary<float,string> waveData = retrieveWaveData();
 		await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
 		spawnEnemies(waveData);
 	}
 
 	
 
-	public SortedList<float, string> retrieveWaveData()
+	public Dictionary<float,string> retrieveWaveData()
 	{
-		SortedList<float, string> waveData = new SortedList<float, string>()
+		Dictionary<float,string> waveData = new Dictionary<float,string>()
 		{
 			{2f, "BlueTank"},
 			{1f, "BlueTank"}
@@ -71,7 +72,7 @@ public class GameScene : Node2D
 		return waveData;
 	}
 
-	public async void spawnEnemies(SortedList<float, string> waveData)
+	public async void spawnEnemies(Dictionary<float,string> waveData)
 	{
 		waveData = retrieveWaveData();
 		foreach (KeyValuePair<float, string> kvp in waveData)
@@ -83,7 +84,6 @@ public class GameScene : Node2D
 		}
 	}
 
-	// Building Functions
 	public void initiateBuildMode(string towerType)
 	{
 		if (buildMode==false)
@@ -126,9 +126,11 @@ public class GameScene : Node2D
 		if (buildValid==true)
 		{
 			// enough money?
+			// ACABAR Turret turret = GetNode<Turret>("Map1/Turrets/" + buildType);
 			PackedScene newTower = (PackedScene)ResourceLoader.Load("res://Scenes/Turrets/" + buildType + ".tscn");
 			Node2D newTowerInstance = (Node2D)newTower.Instance();
 			newTowerInstance.Position = buildLocation;
+			// ACABAR turret.Built = true;
 			mapNode.GetNode<TileMap>("TowerExclusion").SetCellv(buildTile, 5);
 			mapNode.GetNode<Node2D>("Turrets").AddChild(newTowerInstance, true);
 			cancelBuildMode();

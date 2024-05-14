@@ -21,7 +21,6 @@ public class UI : CanvasLayer
 		rangeTexture.Texture = texture;
 		rangeTexture.Modulate = new Color("ad54ff3c");
 
-
 		Control control = new Control();
 		control.AddChild(dragTowerInstance, true);
 		control.AddChild(rangeTexture, true);
@@ -42,4 +41,48 @@ public class UI : CanvasLayer
 			GetNode<Node2D>("TowerPreview/Sprite").Modulate = color;
 		}
 	}
+
+	private void _on_PausePlay_pressed()
+	{
+		// if (GetParent<GameScene>().BuildMode==true)
+		// {
+		// 	GetParent<GameScene>().cancelBuildMode();
+		// }
+		if (GetTree().Paused==true)
+		{
+			GetTree().Paused = false;
+			GD.Print(GetParent());
+		}
+		else if (GetParent<GameScene>().CurrentWave == 0)
+		{
+			GetParent<GameScene>().CurrentWave++;
+			GetParent<GameScene>().startNextWave();
+		}
+		else
+		{
+			GetTree().Paused = true;
+		}
+	}
+
+	private void _on_SpeedUp_pressed()
+	{
+		// if (GetParent<GameScene>().BuildMode==true)
+		// {
+		// 	GetParent<GameScene>().cancelBuildMode();
+		// }
+		if (Engine.TimeScale == 2.0)
+		{
+			Engine.TimeScale = 1.0f;
+		}
+		else
+		{
+			Engine.TimeScale = 2.0f;
+		}
+	}
 }
+
+
+	
+
+
+
