@@ -5,39 +5,67 @@ using System.Linq;
 
 public abstract class Turret : Node2D
 {
-	// ACABAR
 	List<PathFollow2D> enemyList = new List<PathFollow2D>();
-	bool built = false;
-
-	public bool Built { get => built; set => built = value; }
+	string name;
+	PathFollow2D enemy;
 
 	public override void _Ready()
 	{
-		if(built == true)
+		if (this.Name != "DragTower")
 		{
-			GetNode<CircleShape2D>("Range/CollisionShape2D").Radius = 0.5f * GameData.towerData[this.Name]["name"];
+			if (this.Name.Contains("GunT1"))
+			{
+				name = "GunT1";
+			}
+			else if (this.Name.Contains("MissileT1"))
+			{
+				name = "MissileT1";
+			}
+
+			CircleShape2D circleShape = (CircleShape2D)GetNode<CollisionShape2D>("Range/CollisionShape2D").Shape;
+			circleShape.Radius = 0.5f * GameData.towerData[name]["range"];
 		}
 	}
 
-	//
-
-	public void Turn() 
+	public override void _PhysicsProcess(float delta)
 	{
-		Vector2 enemyPosition = GetGlobalMousePosition();
-		GetNode<Sprite>("Turret").LookAt(enemyPosition);
+		if (enemyList.Count != 0 && this.Name != "DragTower")
+		{
+			selectEnemy();
+			turn();
+		}
+		else
+		{
+			enemy = null;
+		}
+	}
+
+	public void turn() 
+	{
+		GetNode<Sprite>("Turret").LookAt(enemy.Position);
+	}
+
+	public void selectEnemy()
+	{
+		List<float> enemyProgressList = new List<float>();
+		foreach (PathFollow2D i in enemyList)
+		{
+			enemyProgressList.Add(i.Offset);
+			float maxOffset = enemyProgressList.Max();
+			int enemyIndex = enemyProgressList.IndexOf(maxOffset);
+			enemy = enemyList[enemyIndex];
+		}
 	}
 	
 	private void _on_Range_body_entered(PathFollow2D body)
 	{
-		enemyList.Append(body.GetParent<PathFollow2D>());
-		GD.Print(enemyList);
+		enemyList.Add(body.GetParent<PathFollow2D>());
 	}
 
 
 	private void _on_Range_body_exited(PathFollow2D body)
 	{
 		enemyList.Remove(body.GetParent<PathFollow2D>());
-		GD.Print(enemyList);
 	}
 }
 

@@ -12,7 +12,7 @@ public class GameScene : Node2D
 	bool buildValid = false;
 	Vector2 buildLocation;
 	Vector2 buildTile;
-	string buildType;
+	string buildType ="";
 
 	int currentWave = 0;
 	int enemiesInWave = 0;
@@ -126,13 +126,12 @@ public class GameScene : Node2D
 		if (buildValid==true)
 		{
 			// enough money?
-			// ACABAR Turret turret = GetNode<Turret>("Map1/Turrets/" + buildType);
 			PackedScene newTower = (PackedScene)ResourceLoader.Load("res://Scenes/Turrets/" + buildType + ".tscn");
 			Node2D newTowerInstance = (Node2D)newTower.Instance();
 			newTowerInstance.Position = buildLocation;
-			// ACABAR turret.Built = true;
 			mapNode.GetNode<TileMap>("TowerExclusion").SetCellv(buildTile, 5);
-			mapNode.GetNode<Node2D>("Turrets").AddChild(newTowerInstance, true);
+			mapNode.GetNode<Node2D>("Turrets").AddChild(newTowerInstance);
+			
 			cancelBuildMode();
 		}
 	}
