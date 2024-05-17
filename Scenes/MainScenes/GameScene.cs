@@ -7,6 +7,8 @@ using System.Security.Cryptography.X509Certificates;
 
 public class GameScene : Node2D
 {
+	[Signal]
+	delegate void gameFinished(bool result);
 	Node2D mapNode;
 	bool buildMode = false;
 	bool buildValid = false;
@@ -16,6 +18,7 @@ public class GameScene : Node2D
 
 	int currentWave = 0;
 	int enemiesInWave = 0;
+	float baseHealth = 100;
 
 	public bool BuildMode { get => buildMode; set => buildMode = value; }
 	public int CurrentWave { get => currentWave; set => currentWave = value; }
@@ -64,8 +67,11 @@ public class GameScene : Node2D
 	{
 		Dictionary<float,string> waveData = new Dictionary<float,string>()
 		{
-			{2f, "BlueTank"},
-			{1f, "BlueTank"}
+			{1f, "BlueTank"},
+			{1.1f, "BlueTank"},
+			{1.2f, "BlueTank"},
+			{1.3f, "BlueTank"},
+			{1.4f, "BlueTank"}
 		};
 		currentWave ++;
 		enemiesInWave = waveData.Count;
@@ -79,6 +85,7 @@ public class GameScene : Node2D
 		{
 			PackedScene newEnemy = (PackedScene)ResourceLoader.Load("res://Scenes/Enemies/" + kvp.Value + ".tscn");
 			Node newEnemyinstance = newEnemy.Instance();
+			newEnemyinstance.Connect("baseDamage", this, "onBaseDamage");
 			mapNode.GetNode<Path2D>("Path").AddChild(newEnemyinstance,true);
 			await ToSignal(GetTree().CreateTimer(kvp.Key), "timeout");
 		}
@@ -133,6 +140,19 @@ public class GameScene : Node2D
 			mapNode.GetNode<Node2D>("Turrets").AddChild(newTowerInstance);
 			
 			cancelBuildMode();
+		}
+	}
+
+	public void onBaseDamage(float damage)
+	{
+		baseHealth -= damage;
+		if (baseHealth <= 0)
+		{
+			EmitSignal("gameFinished", false);
+		}
+		else
+		{
+			GetNode<UI>("UI").updateHealthBar(baseHealth);
 		}
 	}
 }

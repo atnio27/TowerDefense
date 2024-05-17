@@ -5,6 +5,14 @@ using System.Numerics;
 
 public class UI : CanvasLayer
 {
+
+	TextureProgress hpBar;
+	Tween hpBarTween;
+	public override void _Ready()
+	{
+		hpBar = GetNode<TextureProgress>("HUD/InfoBar/H/HP");
+		hpBarTween = GetNode<Tween>("HUD/InfoBar/H/HP/Tween");
+	}
 	public void SetTowerPreview(string towerType, Godot.Vector2 mousePosition)
 	{
 		PackedScene dragTower = (PackedScene)ResourceLoader.Load("res://Scenes/Turrets/" + towerType + ".tscn");
@@ -77,6 +85,24 @@ public class UI : CanvasLayer
 		else
 		{
 			Engine.TimeScale = 2.0f;
+		}
+	}
+
+	public void updateHealthBar(float baseHealth)
+	{
+		hpBarTween.InterpolateProperty(hpBar, "value", hpBar.Value, baseHealth, 0.1f, Tween.TransitionType.Linear, Tween.EaseType.InOut);
+		hpBarTween.Start();
+		if (baseHealth >=60)
+		{
+			hpBar.TintProgress = new Color("3cc510");
+		}
+		else if (baseHealth <= 60 && baseHealth >= 25)
+		{
+			hpBar.TintProgress = new Color("e1be32");
+		}
+		else
+		{
+			hpBar.TintProgress = new Color("e11e1e");
 		}
 	}
 }
